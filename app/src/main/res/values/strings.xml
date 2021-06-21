@@ -3,4 +3,9 @@
     <string name="openport_failed">Connect Failed</string>
     <string name="connect_return_value">Connect return value:</string>
     <string name="connect">Connect</string>
+    <string name="enter_the_antenna_number_to_scan_with">Enter the antenna number to scan with</string>
+    <string name="scan">Scan</string>
+    <string name="mystore_password">Kileed3</string>
+    <string name="start_listener">Start Listener</string>
+    <string name="stop_listener">Stop Listener</string>
 </resources>

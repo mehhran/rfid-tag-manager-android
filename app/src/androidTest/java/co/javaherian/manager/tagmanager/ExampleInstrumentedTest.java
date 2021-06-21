@@ -1,4 +1,4 @@
-package com.example.tagmanager;
+package co.javaherian.manager.tagmanager;
 
 import android.content.Context;
 

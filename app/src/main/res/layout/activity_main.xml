@@ -11,12 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/connect_return_value"
+        app:layout_constraintBaseline_toBaselineOf="@+id/connect_button"
         app:layout_constraintEnd_toStartOf="@+id/connect_result"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/connect_button" />
 
     <TextView
         android:id="@+id/connect_result"
@@ -34,6 +33,48 @@
         android:layout_marginTop="16dp"
         android:text="@string/connect"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/antenna_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="@string/enter_the_antenna_number_to_scan_with"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connect_button" />
+
+    <Button
+        android:id="@+id/startScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/scan"
+        app:layout_constraintBaseline_toBaselineOf="@+id/antenna_number"
+        app:layout_constraintStart_toEndOf="@+id/antenna_number" />
+
+    <Button
+        android:id="@+id/start_listener"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/start_listener"
+        android:onClick="startService"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/antenna_number" />
+
+    <Button
+        android:id="@+id/stop_listener"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/stop_listener"
+        android:onClick="stopService"
+        app:layout_constraintBaseline_toBaselineOf="@+id/start_listener"
+        app:layout_constraintStart_toEndOf="@+id/start_listener" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
