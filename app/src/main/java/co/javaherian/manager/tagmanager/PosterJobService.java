@@ -11,6 +11,8 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.net.ssl.HostnameVerifier;
@@ -49,24 +51,23 @@ public class PosterJobService extends JobService {
                 /*
                 *
                 *  {
-                *   "tags" : {
+                *   "tags" : [
                 *   {"strEPC": strEPC, "antenna": antenna, "strRSSI": strRSSI, "nReadCount": nReadCount},
                 *   {"strEPC": strEPC, "antenna": antenna, "strRSSI": strRSSI, "nReadCount": nReadCount},
                 *   {"strEPC": strEPC, "antenna": antenna, "strRSSI": strRSSI, "nReadCount": nReadCount},
-                *   ...
-                *   }
+                *   ... ],
                 *   "scan_time": time.now(),
                 *  }
                 *
                 */
-                
 
                 RequestBody formBody = new FormBody.Builder()
-                        .add("sender", params.getExtras().getString("felan")) // TO-DO
+                        .add("tags", params.getExtras().getString("tags"))
+                        .add("scan_time", params.getExtras().getString("scan_time"))
                         .build();
 
                 Request request = new Request.Builder()
-                        .url("https://manager.javaherian.co/sms/") // TO-DO
+                        .url("https://manager.javaherian.co/products/tags") // TO-DO
                         .post(formBody)
                         .addHeader("Authorization", "Token 57d6e60dbd5a25fcdf01d7b3bea0400857a9084e") // TO-DO
                         .build();

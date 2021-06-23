@@ -24,7 +24,10 @@
 
         <service android:name=".ReaderJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service android:name=".ListenerService"/>
+        <service android:name=".PosterJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service android:name=".ListenerService" />
 
         <receiver android:name=".AutoStart" android:exported="true">
             <intent-filter android:priority="999">

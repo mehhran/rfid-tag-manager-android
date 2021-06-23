@@ -1,17 +1,27 @@
 package co.javaherian.manager.tagmanager;
 
+import android.app.job.JobInfo;
 import android.app.job.JobParameters;
+import android.app.job.JobScheduler;
 import android.app.job.JobService;
+import android.content.ComponentName;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.RequiresPermission;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rfid.trans.ReadTag;
 import com.rfid.trans.ReaderParameter;
 import com.rfid.trans.TagCallback;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +72,6 @@ public class ReaderJobService extends JobService {
 
                     // preparing
                     MsgCallback callback = new MsgCallback();
-
                     antenna = (byte) params.getExtras().getInt("antenna");
 
                     Reader.rrlib.SetCallBack(callback);
@@ -70,8 +79,6 @@ public class ReaderJobService extends JobService {
                     Reader.rrlib.SetRfPower(power);
                     Reader.rrlib.SetRegion(fband, minFre, maxFre);
                     Reader.rrlib.SetBeepNotification(beepEn);
-
-                    // public static final int PRIORITY_SYNC_EXPEDITED = 10;
 
                     ReaderParameter myParam = Reader.rrlib.GetInventoryPatameter();
                     myParam.Antenna = antenna;
@@ -84,6 +91,7 @@ public class ReaderJobService extends JobService {
                     // continue reading for 10 seconds
                     Log.d(TAG, "Reading...");
                     TimeUnit.SECONDS.sleep(10);
+                    // lsTagList should be populated by now
 
                     // stopread
                     Reader.rrlib.StopRead();
@@ -95,12 +103,42 @@ public class ReaderJobService extends JobService {
                     Log.d(TAG, "Reading Failed");
                 }
 
+                /* save lsTagList in local database */
 
-                // lsTagList is ready
+                /* Post lsTagList to the server - schedule a JobInfo with PosterJobService */
+                // converting the tags list to json string
+                ObjectMapper mapper = new ObjectMapper();
+                String tags_jsonString = null;
+                try {
+                    tags_jsonString = mapper.writeValueAsString(lsTagList);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
 
-                // save lsTagList in local database
+                Date currentTime = Calendar.getInstance().getTime();
 
-                // Post lsTagList to the server - schedule a JobInfo with PosterJobService
+                try {
+                    // schedule a post job
+                    ComponentName componentName = new ComponentName(ReaderJobService.this, PosterJobService.class);
+                    PersistableBundle bundle = new PersistableBundle();
+                    bundle.putString("tags", tags_jsonString);
+                    bundle.putString("scan_time", String.valueOf(currentTime));
+                    JobInfo info = new JobInfo.Builder(123, componentName)
+                            .setPersisted(true)
+                            .setOverrideDeadline(0) /* just for this: java.lang.IllegalArgumentException: You're trying to build a job with no constraints, this is not allowed. */
+                            .setExtras(bundle)
+                            .build();
+                    JobScheduler scheduler = (JobScheduler) ReaderJobService.this.getSystemService(JOB_SCHEDULER_SERVICE);
+                    int resultCode = scheduler.schedule(info);
+                    if (resultCode == JobScheduler.RESULT_SUCCESS) {
+                        Log.d(TAG, "Job scheduled");
+                    } else {
+                        Log.d(TAG, "Job scheduling failed");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
                 Log.d(TAG, "Job finished");
             }

@@ -57,12 +57,13 @@ public class ListenerService extends Service {
         Log.d(TAG, "Service destroyed");
     }
 
-    static class SocketThread extends Thread {
+    class SocketThread extends Thread {
 
         boolean stopThread = false;
         private BufferedReader input;
-        Context ctx;
+
         int antenna = 255;
+        String received_text;
 
         public void run(){
             while(!stopThread)
@@ -77,36 +78,34 @@ public class ListenerService extends Service {
                 try {
                     socket = serverSocket.accept();
                     input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    received_text = input.readLine();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                try {
-                    if (input.readLine().equals("esmeshab")) {
-                        try {
-                            // schedule a read job
-                            ComponentName componentName = new ComponentName(ctx.getApplicationContext(), ReaderJobService.class);
-                            PersistableBundle bundle = new PersistableBundle();
-                            bundle.putInt("antenna", antenna);
-                            JobInfo info = new JobInfo.Builder(123, componentName)
-                                    .setPersisted(true)
-                                    .setOverrideDeadline(0) /* just for this: java.lang.IllegalArgumentException: You're trying to build a job with no constraints, this is not allowed. */
-                                    .setExtras(bundle)
-                                    .build();
-                            JobScheduler scheduler = (JobScheduler) ctx.getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
-                            int resultCode = scheduler.schedule(info);
-                            if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                                Log.d(TAG, "Job scheduled");
-                            } else {
-                                Log.d(TAG, "Job scheduling failed");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
+                if (received_text.equals(getString(R.string.esme_shab))) {
+                    try {
+                        // schedule a read job
+                        ComponentName componentName = new ComponentName(ListenerService.this.getApplicationContext(), ReaderJobService.class);
+                        PersistableBundle bundle = new PersistableBundle();
+                        bundle.putInt("antenna", antenna);
+                        JobInfo info = new JobInfo.Builder(123, componentName)
+                                .setPersisted(true)
+                                .setOverrideDeadline(0) /* to get rid of this: java.lang.IllegalArgumentException: You're trying to build a job with no constraints, this is not allowed. */
+                                .setExtras(bundle)
+                                .build();
+                        JobScheduler scheduler = (JobScheduler) ListenerService.this.getApplicationContext().getSystemService(JOB_SCHEDULER_SERVICE);
+                        int resultCode = scheduler.schedule(info);
+                        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+                            Log.d(TAG, "Job scheduled");
+                        } else {
+                            Log.d(TAG, "Job scheduling failed");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                
 
             }
             Log.d(TAG, "after a 'while'");
