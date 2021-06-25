@@ -10,6 +10,8 @@ import com.rfid.trans.UHFLib;
 
 public class Reader {
     public static UHFLib rrlib = new UHFLib();
+
+    /*
     public  static void writelog(String log,TextView tvResult)
     {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");// HH:mm:ss
@@ -17,4 +19,5 @@ public class Reader {
         String textlog = simpleDateFormat.format(date)+" "+log;
         tvResult.setText(textlog);
     }
+    */
 }

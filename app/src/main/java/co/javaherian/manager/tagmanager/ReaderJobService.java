@@ -7,30 +7,24 @@ import android.app.job.JobService;
 import android.content.ComponentName;
 import android.os.PersistableBundle;
 import android.util.Log;
-import android.view.View;
 
-import androidx.annotation.RequiresPermission;
-
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rfid.trans.ReadTag;
 import com.rfid.trans.ReaderParameter;
 import com.rfid.trans.TagCallback;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 public class ReaderJobService extends JobService {
 
-    private static final String TAG = "SmsPostJobService";
+    private static final String TAG = "ReaderJobService";
 
     int baud = 57600;
     byte antenna = (byte) 255;
@@ -104,6 +98,7 @@ public class ReaderJobService extends JobService {
                 }
 
                 /* save lsTagList in local database */
+                // TO-DO
 
                 /* Post lsTagList to the server - schedule a JobInfo with PosterJobService */
                 // converting the tags list to json string
@@ -125,7 +120,7 @@ public class ReaderJobService extends JobService {
                     bundle.putString("scan_time", String.valueOf(currentTime));
                     JobInfo info = new JobInfo.Builder(123, componentName)
                             .setPersisted(true)
-                            .setOverrideDeadline(0) /* just for this: java.lang.IllegalArgumentException: You're trying to build a job with no constraints, this is not allowed. */
+                            .setOverrideDeadline(0) /* to get rid of this: java.lang.IllegalArgumentException: You're trying to build a job with no constraints, this is not allowed. */
                             .setExtras(bundle)
                             .build();
                     JobScheduler scheduler = (JobScheduler) ReaderJobService.this.getSystemService(JOB_SCHEDULER_SERVICE);

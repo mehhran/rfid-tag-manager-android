@@ -79,6 +79,7 @@ public class ListenerService extends Service {
                     socket = serverSocket.accept();
                     input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     received_text = input.readLine();
+                    socket.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

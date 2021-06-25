@@ -56,7 +56,7 @@ public class PosterJobService extends JobService {
                 *   {"strEPC": strEPC, "antenna": antenna, "strRSSI": strRSSI, "nReadCount": nReadCount},
                 *   {"strEPC": strEPC, "antenna": antenna, "strRSSI": strRSSI, "nReadCount": nReadCount},
                 *   ... ],
-                *   "scan_time": time.now(),
+                *   "scan_time": currentTime,
                 *  }
                 *
                 */
@@ -67,9 +67,9 @@ public class PosterJobService extends JobService {
                         .build();
 
                 Request request = new Request.Builder()
-                        .url("https://manager.javaherian.co/products/tags") // TO-DO
+                        .url("https://manager.javaherian.co/products/tags/") // TO-DO
                         .post(formBody)
-                        .addHeader("Authorization", "Token 57d6e60dbd5a25fcdf01d7b3bea0400857a9084e") // TO-DO
+                        .addHeader("Authorization", "Token c70363e9c9ea8cf6885810c211e76e25be8c76e4") // user: tag_poster
                         .build();
 
                 TrustManagerFactory trustManagerFactory = null;
@@ -138,7 +138,6 @@ public class PosterJobService extends JobService {
             // the bks file we generated above
             final InputStream in = this.getResources().openRawResource( R.raw.manager);
             try {
-                // don't forget to put the password used above in strings.xml/mystore_password
                 ks.load(in, this.getString( R.string.mystore_password ).toCharArray());
             } finally {
                 in.close();
