@@ -85,7 +85,7 @@ public class ReaderJobService extends JobService {
                     // continue reading for 10 seconds
                     Log.d(TAG, "Reading...");
                     TimeUnit.SECONDS.sleep(10);
-                    // lsTagList should be populated by now
+                    // lsTagList should've been populated by now
 
                     // stopread
                     Reader.rrlib.StopRead();
