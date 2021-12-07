@@ -66,10 +66,12 @@ public class PosterJobService extends JobService {
                         .add("scan_time", params.getExtras().getString("scan_time"))
                         .build();
 
+                String myApiKey = BuildConfig.API_KEY;
+
                 Request request = new Request.Builder()
-                        .url("https://manager.javaherian.co/products/tags/") // TO-DO
+                        .url("https://manager.javaherian.co/products/tags/")
                         .post(formBody)
-                        .addHeader("Authorization", "Token c70363e9c9ea8cf6885810c211e76e25be8c76e4") // user: tag_poster
+                        .addHeader("Authorization", myApiKey) // user: tag_poster
                         .build();
 
                 TrustManagerFactory trustManagerFactory = null;
@@ -135,7 +137,6 @@ public class PosterJobService extends JobService {
         try {
             final KeyStore ks = KeyStore.getInstance("BKS");
 
-            // the bks file we generated above
             final InputStream in = this.getResources().openRawResource( R.raw.manager);
             try {
                 ks.load(in, this.getString( R.string.mystore_password ).toCharArray());
