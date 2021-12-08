@@ -49,6 +49,7 @@ public class PosterJobService extends JobService {
             public void run() {
 
                 /*
+                *  Something like this will be sent to the server:
                 *
                 *  {
                 *   "tags" : [
@@ -67,11 +68,12 @@ public class PosterJobService extends JobService {
                         .build();
 
                 String myApiKey = BuildConfig.API_KEY;
+                String myApiUrl = BuildConfig.TAGS_API_URL;
 
                 Request request = new Request.Builder()
-                        .url("https://manager.javaherian.co/products/tags/")
+                        .url(myApiUrl)
                         .post(formBody)
-                        .addHeader("Authorization", myApiKey) // user: tag_poster
+                        .addHeader("Authorization", myApiKey)
                         .build();
 
                 TrustManagerFactory trustManagerFactory = null;

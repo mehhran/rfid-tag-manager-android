@@ -24,6 +24,7 @@ android {
         }
 
         buildConfigField "String", "API_KEY", localProperties['tag_poster_key']
+        buildConfigField "String", "TAGS_API_URL", localProperties['tags_api_url']
     }
 
     buildTypes {
