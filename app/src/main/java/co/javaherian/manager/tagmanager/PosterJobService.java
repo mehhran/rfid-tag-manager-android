@@ -115,7 +115,7 @@ public class PosterJobService extends JobService {
                             HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
                             /* Never return true without verifying the hostname, otherwise you will be vulnerable
                             to man in the middle attacks. */
-                            return  hv.verify("manager", session);
+                            return  hv.verify(getString(R.string.my_hostname), session);
                         })
                         .sslSocketFactory(sslSocketFactory, trustManager)
                         .build();
@@ -139,7 +139,7 @@ public class PosterJobService extends JobService {
         try {
             final KeyStore ks = KeyStore.getInstance("BKS");
 
-            final InputStream in = this.getResources().openRawResource( R.raw.manager);
+            final InputStream in = this.getResources().openRawResource(R.raw.manager);
             try {
                 ks.load(in, this.getString( R.string.mystore_password ).toCharArray());
             } finally {

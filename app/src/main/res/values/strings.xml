@@ -9,4 +9,5 @@
     <string name="start_listener">Start Listener</string>
     <string name="stop_listener">Stop Listener</string>
     <string name="esme_shab">araghjooje</string>
+    <string name="my_hostname">manager</string>
 </resources>
