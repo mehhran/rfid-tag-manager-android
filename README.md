@@ -1,4 +1,4 @@
 # RFID Tag Management for Android
-Start reading tags with antenas once received the signal.
-Sends the read tags list to the api server after each reading.
-To run on the Chafon Android Device.
+- To run on the Chafon Android Device.
+- Starts reading tags with once received the signal (a network socket).
+- Sends the tags list to the api server after each reading.
