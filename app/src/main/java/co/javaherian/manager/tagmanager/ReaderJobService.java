@@ -151,22 +151,22 @@ public class ReaderJobService extends JobService {
         @Override
         public void tagCallback(ReadTag readTag) {
             String epc = readTag.epcId.toUpperCase();
-            InventoryTagMap m;
+            InventoryTagMap tag;
             Integer findIndex = dtIndexMap.get(epc);
             if (findIndex == null) {
                 dtIndexMap.put(epc, dtIndexMap.size());
-                m = new InventoryTagMap();
-                m.strEPC = epc;
-                m.antenna = readTag.antId;
-                m.strRSSI = String.valueOf(readTag.rssi);
-                m.nReadCount = 1;
+                tag = new InventoryTagMap();
+                tag.strEPC = epc;
+                tag.antenna = readTag.antId;
+                tag.strRSSI = String.valueOf(readTag.rssi);
+                tag.nReadCount = 1;
                 //dtIndexMap
-                lsTagList.add(m);
+                lsTagList.add(tag);
             } else {
-                m = lsTagList.get(findIndex);
-                m.antenna |= readTag.antId;
-                m.nReadCount++;
-                m.strRSSI = String.valueOf(readTag.rssi);
+                tag = lsTagList.get(findIndex);
+                tag.antenna |= readTag.antId;
+                tag.nReadCount++;
+                tag.strRSSI = String.valueOf(readTag.rssi);
             }
         }
 

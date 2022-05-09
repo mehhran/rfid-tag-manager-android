@@ -76,50 +76,7 @@ public class PosterJobService extends JobService {
                         .addHeader("Authorization", myApiKey)
                         .build();
 
-                TrustManagerFactory trustManagerFactory = null;
-                try {
-                    trustManagerFactory = TrustManagerFactory.getInstance(
-                            TrustManagerFactory.getDefaultAlgorithm());
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    assert trustManagerFactory != null;
-                    trustManagerFactory.init((KeyStore) myKeyStore());
-                } catch (KeyStoreException e) {
-                    e.printStackTrace();
-                }
-                TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-                if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-                    throw new IllegalStateException("Unexpected default trust managers:"
-                            + Arrays.toString(trustManagers));
-                }
-                X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
-
-                SSLContext sslContext = null;
-                try {
-                    sslContext = SSLContext.getInstance("TLS");
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    assert sslContext != null;
-                    sslContext.init(null, new TrustManager[] { trustManager }, null);
-                } catch (KeyManagementException e) {
-                    e.printStackTrace();
-                }
-                SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-                OkHttpClient client = new OkHttpClient.Builder()
-                        .hostnameVerifier((hostname, session) -> {
-                            HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
-                            /* Never return true without verifying the hostname, otherwise you will be vulnerable
-                            to man in the middle attacks. */
-                            return  hv.verify(getString(R.string.my_hostname), session);
-                        })
-                        .sslSocketFactory(sslSocketFactory, trustManager)
-                        .build();
-
+                OkHttpClient client = new OkHttpClient();
                 Call call = client.newCall(request);
 
                 try {
